@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>pixi.js example 1</title>
+	<meta charset="utf-8">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/pixi.js/3.0.6/pixi.min.js"></script>
+	<script src="keyboard.js"></script>
+
+</head>
+<body>
+<script>
+	//Our heroic rabbit
+	
+	var playWidth = 500;
+	var playHeight = 750;
+ 	var bunny = undefined;
+ 	
+	var interactive = true;
+	var stage = new PIXI.Stage(0xFFFFFF,interactive);
+
+	// create a renderer instance
+	var renderer = new PIXI.autoDetectRenderer(playWidth, playHeight);
+
+	// add the renderer view element to the DOM
+	document.body.appendChild(renderer.view);
+
+	//show the background on the screen
+	requestAnimationFrame( animate );
+
+
+
+	setupSprite();
+	
+	
+	
+	function setupSprite() 
+	{
+		// create a texture from the loaded texture cache
+		var texture = PIXI.Texture.fromImage('images/bunny.png');
+		// create a new Sprite using the texture
+		bunny = new PIXI.Sprite(texture);
+		
+			// center the sprites anchor point
+		bunny.anchor.x = 0.5;
+		bunny.anchor.y = 0.5;
+	
+		bunny.scale.x=.124;
+		bunny.scale.y=.124;
+
+		// Set velocity to 0
+		bunny.vy = 0;
+		bunny.vx = 0;
+
+		// move the sprite t the center of the screen
+		bunny.position.x = 200;
+		bunny.position.y = 150;
+		bunny.interactive = true;
+		
+		//add the bunny to the stage and then make it visible
+		stage.addChild(bunny);
+		renderer.render(stage);
+		
+		//Capture the keyboard arrow keys
+		var left = keyboard(37);
+		var up = keyboard(38);
+		var right = keyboard(39);
+		var down = keyboard(40);
+
+		 //Left arrow methods
+ 		 left.press = function() 
+ 		 {
+ 		 	bunny.vx = -5;
+		 };
+
+
+  		left.release = function() 
+ 		{
+ 			if (right.isDown === false)
+ 			{
+ 			  	bunny.vx = 0;
+    			}
+    			
+ 		};
+
+
+		up.press = function() 
+		{
+
+			if (bunny.vx != 0)
+			{
+				bunny.vy = -5;
+			}
+			else if (right.isDown ===true)
+			{
+				bunny.vx = 5;
+				bunny.vy = -5;
+			}
+			else if (left.isDown ===true)
+			{
+				bunny.vx = -5;
+				bunny.vy = -5;
+			}
+			else if (down. isUp ===true)
+			{
+				bunny.vy = -5;
+				bunny.vx = 0;
+			}
+		};
+		
+		up.release = function() 
+		{
+   			if (down.isDown === false) 
+   			{
+			      bunny.vy = 0;
+			}
+			
+			if (left.isUp  === true && right.isUp === true)
+			{
+				bunny.vx = 0;
+			}
+		};
+
+  //Right
+		right.press = function() 
+		{
+			bunny.vx = 5;
+		};
+
+		right.release = function() 
+		{
+ 			if (left.isDown === false)
+ 			{
+ 			  	bunny.vx = 0;
+    			}
+		};
+
+
+		down.press = function() 
+		{
+			if (bunny.vx != 0)
+			{
+				bunny.vy = 5;
+			}
+			else if (right.isDown ===true)
+			{
+				bunny.vx = 5;
+				bunny.vy = 5;
+			}
+			else if (left.isDown ===true)
+			{
+				bunny.vx = -5;
+				bunny.vy = 5;
+			}
+			else if (down.isUp ===true)
+			{
+				bunny.vy = 5;
+				bunny.vx = 0;
+			}
+		};
+		down.release = function() 
+		{
+   			if (up.isDown === false) 
+   			{
+			      bunny.vy = 0;
+			}
+			
+			if (right.isUp  === true && left.isUp === true)
+			{
+				bunny.vx = 0;
+			}
+		};
+		
+	}
+
+
+	function animate() {
+
+	    requestAnimationFrame( animate );
+
+	    // just for fun, lets rotate mr rabbit a little
+		play();
+
+	    // render the stage
+	    renderer.render(stage);
+	}
+	
+	function play() 
+	{
+
+  		bunny.x += bunny.vx;
+ 		 bunny.y += bunny.vy;
+ 	}
+
+	
+    </script>
+
+	</body>
+</html>
